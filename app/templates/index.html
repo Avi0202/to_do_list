@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link href="/static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Todo App</h1>
+        
+        <form action="/todos/" method="post" class="todo-form">
+            <input type="text" name="title" placeholder="Task title" required>
+            <textarea name="description" placeholder="Description (optional)"></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+        
+        <div class="todos-container">
+            <h2>Tasks</h2>
+            {% if todos %}
+                <ul class="todo-list">
+                    {% for todo in todos %}
+                        <li class="todo-item {% if todo.completed %}completed{% endif %}">
+                            <div class="todo-content">
+                                <h3>{{ todo.title }}</h3>
+                                {% if todo.description %}
+                                    <p>{{ todo.description }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="todo-actions">
+                                <form action="/todos/{{ todo.id }}/toggle" method="post">
+                                    <input type="checkbox" class="toggle-checkbox" {% if todo.completed %}checked{% endif %} onchange="this.form.submit()">
+                                </form>
+                                <form action="/todos/{{ todo.id }}/delete" method="post">
+                                    <button type="submit" class="btn delete-btn">
+                                        <span class="dustbin-icon">🗑️</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-message">No tasks yet. Add one above!</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html> 
